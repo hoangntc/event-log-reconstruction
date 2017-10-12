@@ -1,0 +1,6 @@
+input/*
+reference/*
+experiment/output/*
+figures/*
+utils/__pycache__/*
+*/.ipynb_checkpoints
