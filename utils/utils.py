@@ -184,20 +184,29 @@ def findValidMinMax(caseid, min_max_storage):
     max_val_before= 0
     min_val_after = 0
     max_val_after = 0
-
-    for i in range(caseid):
-        min_val_before = min_max_storage[caseid-i]['missing_min_val']
-        max_val_before = min_max_storage[caseid-i]['missing_max_val']
-        if not np.isnan(min_val_before) and not np.isnan(max_val_before):
-            break
+    min_val = 0
+    max_val = 0
     
-    for j in range(len(min_max_storage) - caseid+1):
-        min_val_after = min_max_storage[caseid+j]['missing_min_val']
-        max_val_after = min_max_storage[caseid+j]['missing_max_val']
-        if not np.isnan(min_val_after) and not np.isnan(max_val_after):
-            break
-    min_val = (min_val_before+min_val_after)/2
-    max_val = (max_val_before+max_val_after)/2
+    if caseid == len(min_max_storage):
+        for i in range(caseid):
+            min_val = min_max_storage[caseid-i]['missing_min_val']
+            max_val = min_max_storage[caseid-i]['missing_max_val']
+            if not np.isnan(min_val) and not np.isnan(max_val):
+                break
+    else:
+        for i in range(caseid):
+            min_val_before = min_max_storage[caseid-i]['missing_min_val']
+            max_val_before = min_max_storage[caseid-i]['missing_max_val']
+            if not np.isnan(min_val_before) and not np.isnan(max_val_before):
+                break
+    
+        for j in range(len(min_max_storage) - caseid+1):
+            min_val_after = min_max_storage[caseid+j]['missing_min_val']
+            max_val_after = min_max_storage[caseid+j]['missing_max_val']
+            if not np.isnan(min_val_after) and not np.isnan(max_val_after):
+                break
+        min_val = (min_val_before+min_val_after)/2
+        max_val = (max_val_before+max_val_after)/2
     return min_val, max_val
 
 
