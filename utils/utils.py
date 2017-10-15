@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 import math
-from sklearn.metrics import mean_absolute_error
+from math import sqrt
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 from sklearn.metrics import accuracy_score, log_loss
 import torch
 import torch.nn as nn
@@ -190,7 +191,7 @@ def findValidMinMax(caseid, min_max_storage):
         if not np.isnan(min_val_before) and not np.isnan(max_val_before):
             break
     
-    for j in range(len(min_max_storage) - caseid):
+    for j in range(len(min_max_storage) - caseid+1):
         min_val_after = min_max_storage[caseid+j]['missing_min_val']
         max_val_after = min_max_storage[caseid+j]['missing_max_val']
         if not np.isnan(min_val_after) and not np.isnan(max_val_after):
@@ -212,6 +213,7 @@ def getDfWithTime(recon_df_w_normalized_time, missing_true_test, min_max_storage
     return recon_df_w_time
 
 
+
 def getnanindex(missing_true_df):
     nan_time_index = []
     nan_activity_index = []
@@ -224,7 +226,8 @@ def getnanindex(missing_true_df):
     return nan_time_index, nan_activity_index
 
 def getSubmission(recon_df_w_time, missing_true_test, complete_true_test, first_timestamp):
-    temp = pd.DataFrame(columns=['TrueActivity', 'PredictedActivity', 'TrueTime', 'PredictedTime'])
+    temp = pd.DataFrame(columns=['CaseID', 'TrueActivity', 'PredictedActivity', 'TrueTime', 'PredictedTime'])
+    temp['CaseID'] = missing_true_test['CaseID'].copy()
     
     #ground truth
     temp['TrueActivity'] = complete_true_test['Activity'].copy()
@@ -244,12 +247,27 @@ def getSubmission(recon_df_w_time, missing_true_test, complete_true_test, first_
             temp.loc[row, 'PredictedCompleteTimestamp'] = first_timestamp+timedelta(seconds=recon_df_w_time.loc[row, 'PredictedCumTimeInterval'])
     return temp
 
+def fixTime(recon_df_w_time):
+    groupByCase = recon_df_w_time.groupby(['CaseID'])
+    temp = pd.DataFrame(columns=list(recon_df_w_time))
+
+    for caseid, data_case in groupByCase:
+        for row in range(1, len(data_case)):
+            current = data_case.iloc[row, data_case.columns.get_loc('PredictedTime')]
+            previous = data_case.iloc[row-1, data_case.columns.get_loc('PredictedTime')]
+            if current < previous:
+                data_case.iloc[row, data_case.columns.get_loc('PredictedTime')] = previous
+                data_case.iloc[row, data_case.columns.get_loc('PredictedCompleteTimestamp')] = data_case.iloc[row-1, data_case.columns.get_loc('PredictedCompleteTimestamp')]
+        temp = temp.append(data_case)
+    return temp
+
 
 def evaluation(submission_df, nan_time_index, nan_activity_index, show=False):
     #eval Time
     true_time = submission_df.loc[nan_time_index, 'TrueTime']
     predicted_time = submission_df.loc[nan_time_index, 'PredictedTime']
-    time = mean_absolute_error(true_time, predicted_time)
+    mae_time = mean_absolute_error(true_time, predicted_time)
+    rmse_time = sqrt(mean_squared_error(true_time, predicted_time))
     
     #eval Activity
     true_activity = submission_df.loc[nan_activity_index, 'TrueActivity']
@@ -258,9 +276,10 @@ def evaluation(submission_df, nan_time_index, nan_activity_index, show=False):
     
     if show==True: 
         print('Number of missing Time: {}'.format(len(nan_time_index)))
-        print('Mean Absolute Error: {:.4f} day(s)'.format(time/86400))
+        print('Mean Absolute Error: {:.4f} day(s)'.format(mae_time/86400))
+        print('Root Mean Squared Error: {:.4f} day(s)'.format(rmse_time/86400))
         
         print('Number of missing Activity: {}'.format(len(nan_activity_index)))
         print('Accuracy: {:.2f}%'.format(acc*100))
-    return time, acc
+    return mae_time, rmse_time, acc
 
