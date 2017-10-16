@@ -58,6 +58,7 @@ from utils import *
 complete_df_full_name = 'complete_df_full_{}.csv'.format(args.nan_pct)
 missing_df_full_name = 'missing_df_full_{}.csv'.format(args.nan_pct)
 print('Loading data:')
+print(args.name)
 print(complete_df_full_name)
 print(missing_df_full_name)
 
@@ -185,6 +186,11 @@ pad_matrix_val = vectorized_pad_index_df[train_size:train_size+val_size]
 complete_matrix_w_normalized_time_test = vectorized_complete_df_w_normalized_time[train_size+val_size:]
 missing_matrix_w_normalized_time_test = vectorized_missing_df_w_normalized_time[train_size+val_size:]
 
+avai_matrix_test = vectorized_avai_index_df[train_size+val_size:]
+nan_matrix_test = vectorized_nan_index_df[train_size+val_size:]
+pad_matrix_test = vectorized_pad_index_df[train_size+val_size:]
+
+
 #check number of avai instances in test set
 print('Checking number of available instances in test set:...')
 check_avai = avai_matrix_test.copy()
@@ -202,10 +208,6 @@ check_nan = check_nan.reshape(nan_matrix_test.shape[0]*nan_matrix_test.shape[1],
 check_nan = check_nan[np.any(check_nan != 0, axis=1)]
 print('Number of nan row: {}'.format(check_nan.shape[0]))
 print(check_nan.shape[0] == nan_instance)
-
-avai_matrix_test = vectorized_avai_index_df[train_size+val_size:]
-nan_matrix_test = vectorized_nan_index_df[train_size+val_size:]
-pad_matrix_test = vectorized_pad_index_df[train_size+val_size:]
 
 
 print('Saving preprocessed data...')

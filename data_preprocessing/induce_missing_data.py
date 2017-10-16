@@ -47,6 +47,9 @@ from utils import *
 
 #Load data
 
+print('Loading data...')
+print(args.name)
+
 # Only consider Case, Activity, Timestamp
 cols = ['CaseID', 'Activity', 'CompleteTimestamp']
 
