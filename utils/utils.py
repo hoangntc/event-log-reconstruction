@@ -158,7 +158,8 @@ def convert2df(predicted_tensor, pad_matrix, cols, test_row_num):
         df = pd.DataFrame(temp_array, columns=cols)
         activity_list = [i for i in cols if i!='NormalizedTime']
         df['PredictedActivity'] = df[activity_list].idxmax(axis=1) #get label
-        df['PredictedActivity'] = df['PredictedActivity'].apply(lambda x: x.split('_')[1]) #remove prefix
+        #df['PredictedActivity'] = df['PredictedActivity'].apply(lambda x: x.split('_')[1]) #remove prefix
+        df['PredictedActivity'] = df['PredictedActivity'].apply(lambda x: x[9:]) #remove prefix Activity_
         df = df.drop(activity_list, axis=1)
         #print('Done!!!')
     return df
