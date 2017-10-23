@@ -277,7 +277,7 @@ class AE_1(nn.Module):
         z = self.encode(x.view(-1, self.shape[1]*self.shape[2]))
         return self.decode(z, x)
     
-    
+   
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, isCuda):
         super(EncoderRNN, self).__init__()
@@ -287,7 +287,6 @@ class EncoderRNN(nn.Module):
         
         self.isCuda = isCuda
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
-        self.relu = nn.ReLU()
         
         #initialize weights
         nn.init.xavier_uniform(self.lstm.weight_ih_l0, gain=np.sqrt(2))
@@ -295,10 +294,9 @@ class EncoderRNN(nn.Module):
 
     def forward(self, input):
         tt = torch.cuda if self.isCuda else torch
-        h0 = Variable(tt.FloatTensor(self.num_layers, input.size(0), self.hidden_size))
-        c0 = Variable(tt.FloatTensor(self.num_layers, input.size(0), self.hidden_size))
+        h0 = Variable(tt.FloatTensor(self.num_layers, input.size(0), self.hidden_size).zero_(), requires_grad=False)
+        c0 = Variable(tt.FloatTensor(self.num_layers, input.size(0), self.hidden_size).zero_(), requires_grad=False)
         encoded_input, hidden = self.lstm(input, (h0, c0))
-        encoded_input = self.relu(encoded_input)
         return encoded_input
 
 class DecoderRNN(nn.Module):
@@ -319,8 +317,8 @@ class DecoderRNN(nn.Module):
         
     def forward(self, encoded_input):
         tt = torch.cuda if self.isCuda else torch
-        h0 = Variable(tt.FloatTensor(self.num_layers, encoded_input.size(0), self.output_size))
-        c0 = Variable(tt.FloatTensor(self.num_layers, encoded_input.size(0), self.output_size))
+        h0 = Variable(tt.FloatTensor(self.num_layers, encoded_input.size(0), self.output_size).zero_(), requires_grad=False)
+        c0 = Variable(tt.FloatTensor(self.num_layers, encoded_input.size(0), self.output_size).zero_(), requires_grad=False)
         decoded_output, hidden = self.lstm(encoded_input, (h0, c0))
         decoded_output = self.sigmoid(decoded_output)
         return decoded_output

@@ -19,9 +19,11 @@ experiment/output/bpi_2013_0.4_VAE/*
 !experiment/output/bpi_2013_0.4_VAE/model_VAE_epoch10_score1.1305.pth
 experiment/output/bpi_2013_0.5_VAE/*
 !experiment/output/bpi_2013_0.5_VAE/model_VAE_epoch2_score1.1835.pth
+experiment/output/bpi_2013_0.3_LSTMAE/*
 experiment/output/bpi_2012_0.3_AE/*
 experiment/output/bpi_2012_0.35_AE/*
 experiment/output/bpi_2012_0.4_AE/*
+
 experiment/output/bpi_2012_0.5_AE/*
 experiment/output/bpi_2012_0.3_VAE/*
 experiment/output/bpi_2012_0.35_VAE/*
