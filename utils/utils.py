@@ -119,8 +119,8 @@ def getMeanVar(array, idx=0):
     return mean_val, var_val
 
 def getProbability(recon_test):
-    '''This function takes 3d tensor as input and return a 3d tensor which has probabilities for 
-    classes of categorical variable'''
+    '''This function takes 3d tensor as input and return a 3d tensor which has 
+    probabilities for classes of categorical variable'''
     softmax = nn.Softmax()
     #recon_test = recon_test.view(c_test.shape)
     
@@ -293,3 +293,54 @@ def evaluation(submission_df, nan_time_index, nan_activity_index, show=False):
         print('Accuracy: {:.2f}%'.format(acc*100))
     return mae_time, rmse_time, acc
 
+'''
+def val(model, missing_matrix_w_normalized_time_val, complete_true_val, missing_true_val,
+       pad_matrix_val, cols_w_normalized_time, val_row_num,
+       nan_time_index_val, nan_activity_index_val):
+    model.eval()
+    m_val = missing_matrix_w_normalized_time_val
+    m_val = Variable(torch.Tensor(m_val).float())
+    
+    if args.cuda:
+        m_val = m_val.cuda()
+        
+    recon_val, mu, logvar = model(m_val)
+    
+    recon_df_w_normalized_time = convert2df(recon_val, pad_matrix_val, cols_w_normalized_time, val_row_num)
+    recon_df_w_time = getDfWithTime(recon_df_w_normalized_time, missing_true_val, min_max_storage)
+    submission_df = getSubmission(recon_df_w_time, missing_true_val, complete_true_val, first_timestamp)
+    
+    #evaluate
+    mae_time, rmse_time, acc = evaluation(submission_df, nan_time_index_val, nan_activity_index_val)
+    
+    
+    return mae_time/86400+1/acc
+    
+#val_score = val(model, missing_matrix_w_normalized_time_val, complete_true_val, missing_true_val,
+#                 pad_matrix_val, cols_w_normalized_time, val_row_num,
+#                 nan_time_index_val, nan_activity_index_val)
+'''
+
+'''
+def val(model, missing_matrix_w_normalized_time_val, complete_matrix_w_normalized_time_val, nan_matrix_val):
+    model.eval()
+    m_val = missing_matrix_w_normalized_time_val
+    m_val = Variable(torch.Tensor(m_val).float())
+    
+    c_val = complete_matrix_w_normalized_time_val
+    c_val = Variable(torch.Tensor(c_val).float())
+    
+    nan_matrix_val = Variable(torch.Tensor(nan_matrix_val).float())
+    
+    if args.cuda:
+        m_val = m_val.cuda()
+        c_val = c_val.cuda()
+        nan_matrix_val = nan_matrix_val.cuda()
+        
+    recon_data, mu, logvar = model(m_val)
+        
+    loss = loss_function(recon_data, c_val, mu, logvar, nan_matrix_val)
+    return loss.data[0]/missing_matrix_w_normalized_time_val.shape[0]
+    
+#val_score = val(model, missing_matrix_w_normalized_time_val, complete_matrix_w_normalized_time_val, avai_matrix_val)
+'''
