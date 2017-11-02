@@ -241,7 +241,7 @@ class AE(nn.Module):
         z = self.encode(x.view(-1, self.shape[1]*self.shape[2]))
         return self.decode(z, x)
     
-class AE_1(nn.Module):
+class AE_tanh(nn.Module):
     def __init__(self, shape, h_dim, z_dim):
         super(AE_1, self).__init__()
         self.shape = shape
@@ -262,14 +262,14 @@ class AE_1(nn.Module):
 
     def encode(self, x):
         #x --> fc1 --> fc2 --> tanh --> z
-        h = self.fc1(x)
-        z = self.tanh(self.fc2(self.tanh(h)))
+        h = self.tanh(self.fc1(x))
+        z = self.tanh(self.fc2(h))
         return z
 
     def decode(self, z, x):
         #z --> fc3 --> fc4 --> sigmoid
-        h = self.fc3(z)
-        recon_x = self.sigmoid(self.fc4(self.tanh(h)))
+        h = self.tanh(self.fc3(z))
+        recon_x = self.sigmoid(self.fc4(h))
         return recon_x.view(x.size())
     
     def forward(self, x):
