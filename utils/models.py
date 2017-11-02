@@ -243,7 +243,7 @@ class AE(nn.Module):
     
 class AE_tanh(nn.Module):
     def __init__(self, shape, h_dim, z_dim):
-        super(AE_1, self).__init__()
+        super(AE_tanh, self).__init__()
         self.shape = shape
         
         # X --> fc1 --> Z --> fc2 --> X'
