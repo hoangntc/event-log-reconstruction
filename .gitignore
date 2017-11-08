@@ -1,8 +1,11 @@
 /input/*
+Presentation.pptx
 /reference/*
 /figures/*
 /utils/__pycache__/*
 */.ipynb_checkpoints
+
+experiment/output/results.xlsx
 
 experiment/output/bpi_2013_0.3_AE/*
 !experiment/output/bpi_2013_0.3_AE/model_AE_epoch9_score1.1168.pth

@@ -10,11 +10,11 @@ event-log-reconstruction
 |--- data: original dataset
 │   │   bpi_2012.csv
 |   |   bpi_2013.csv
-|   |   helpdesk.csv
 | 
 |--- data_preprocessing
 |   |   induce_missing_data.ipynb
 |   │   preprocess_variables.ipynb
+|   |   data_preprocessing.sh
 |
 |--- utils
 |   |   utils.py
@@ -41,7 +41,7 @@ event-log-reconstruction
 - Install pytorch: ```conda install pytorch torchvision -c soumith```
 - ```pip install -r requirements.txt```
 
-2. Run ```induce_missing_data.ipynb```
-2. Run ```preprocess_variables.ipynb```
-3. Run ```AE.ipynb``` or ```VAE.ipynb```
+2. ```cd data_preprocessing```
+3. For preprocessing: Run ```source data_preprocessing.sh```
+4. For training and evaluating: Run ```AE.ipynb``` or ```VAE.ipynb```
 
