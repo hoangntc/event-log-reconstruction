@@ -42,6 +42,6 @@ event-log-reconstruction
 - ```pip install -r requirements.txt```
 
 2. ```cd data_preprocessing```
-3. For preprocessing: Run ```source data_preprocessing.sh```
+3. For preprocessing: ```source data_preprocessing.sh```
 4. For training and evaluating: Run ```AE.ipynb``` or ```VAE.ipynb```
 
