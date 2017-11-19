@@ -122,7 +122,7 @@ def getProbability(recon_test):
     '''This function takes 3d tensor as input and return a 3d tensor which has 
     probabilities for classes of categorical variable'''
     softmax = nn.Softmax()
-    #recon_test = recon_test.view(c_test.shape)
+    recon_test = recon_test.cpu() #moving data from gpu to cpu for full evaluation
     
     for i in range(recon_test.size(0)):
         cont_values = recon_test[i, :, 0].contiguous().view(recon_test.size(1),1) #(35,1)

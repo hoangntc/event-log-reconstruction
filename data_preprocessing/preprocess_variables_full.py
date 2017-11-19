@@ -54,7 +54,6 @@ from utils import *
 
 
 #Load data
-
 complete_df_full_name = 'complete_df_full_{}.csv'.format(args.nan_pct)
 missing_df_full_name = 'missing_df_full_{}.csv'.format(args.nan_pct)
 print('Loading data:')
@@ -68,9 +67,10 @@ df = pd.read_csv(df_name)
 missing_df_name = os.path.join(args.input_dir, missing_df_full_name)
 missing_df = pd.read_csv(missing_df_name)
 
-
 #Preprocess data
 print('Processing data...')
+groupByCase = df.groupby(['CaseID'])
+
 groupByCase = df.groupby(['CaseID'])
 missing_groupByCase = missing_df.groupby(['CaseID'])
 
@@ -83,12 +83,7 @@ for i, j in zip(groupByCase, missing_groupByCase):
     normalized_complete_df = normalized_complete_df.append(temp)
     normalized_missing_df = normalized_missing_df.append(missing_temp)
     min_max_storage.update(missing_case_storage)
-    
-normalized_complete_df_name = os.path.join(args.input_dir, 'normalized_complete_df_{}.csv'.format(args.nan_pct))
-normalized_complete_df.to_csv(normalized_complete_df_name, index=False)
 
-normalized_missing_df_name = os.path.join(args.input_dir, 'normalized_missing_df_{}.csv'.format(args.nan_pct))
-normalized_missing_df.to_csv(normalized_missing_df_name, index=False)
 
 cat_var = ['Activity']
 
@@ -172,24 +167,6 @@ missing_matrix_w_normalized_time = vectorized_missing_df_w_normalized_time
 avai_matrix = vectorized_avai_index_df
 nan_matrix = vectorized_nan_index_df
 pad_matrix = vectorized_pad_index_df
-
-#check number of avai instances in test set
-print('Checking number of available instances in test set:...')
-check_avai = avai_matrix_test.copy()
-check_avai = check_avai.reshape(avai_matrix_test.shape[0]*avai_matrix_test.shape[1], avai_matrix_test.shape[2])
-check_avai = check_avai[np.all(check_avai == 1, axis=1)]
-print('Number of available row: {}'.format(check_avai.shape[0]))
-print(check_avai.shape[0] == avai_instance)
-
-print('\n')
-
-#check number of nan instances in test set
-print('Checking number of nan instances in test set:...')
-check_nan = nan_matrix_test.copy()
-check_nan = check_nan.reshape(nan_matrix_test.shape[0]*nan_matrix_test.shape[1], nan_matrix_test.shape[2])
-check_nan = check_nan[np.any(check_nan != 0, axis=1)]
-print('Number of nan row: {}'.format(check_nan.shape[0]))
-print(check_nan.shape[0] == nan_instance)
 
 
 print('Saving preprocessed data...')

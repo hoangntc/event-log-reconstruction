@@ -311,6 +311,7 @@ class DecoderRNN(nn.Module):
         
         self.lstm = nn.LSTM(hidden_size, hidden_size, num_layers, batch_first=True)
         self.linear = nn.Linear(hidden_size, output_size)
+        self.sigmoid = nn.Sigmoid()
         
         #initialize weights
         nn.init.xavier_uniform(self.lstm.weight_ih_l0, gain=np.sqrt(2))
@@ -320,7 +321,8 @@ class DecoderRNN(nn.Module):
     def forward(self, encoded_input, hidden):
         tt = torch.cuda if self.isCuda else torch
         decoded_output, _ = self.lstm(encoded_input, hidden)
-        decoded_output = self.linear(decoded_output) 
+        decoded_output = self.linear(decoded_output)
+        decoded_output = self.sigmoid(decoded_output)
         return decoded_output
 
 class LSTMAE(nn.Module):
