@@ -12,9 +12,9 @@ event-log-reconstruction
 |   |   bpi_2013.csv
 | 
 |--- data_preprocessing
-|   |   induce_missing_data.ipynb
-|   │   preprocess_variables.ipynb
-|   |   data_preprocessing.sh
+|   |   induce_missing_data.py
+|   │   preprocess_variables.py
+|   |   real_log_preprocessing.sh
 |
 |--- utils
 |   |   utils.py
@@ -26,9 +26,12 @@ event-log-reconstruction
 |   |   output
 |   |   AE.ipynb
 |   |   VAE.ipynb
+|   |   LSTMAE.ipynb
 |
 |-- base_model
 |   |   dummy_imputation.ipynb
+|   |   dummy_imputation_full.ipynb
+|   |   statistical_description.ipynb
 |
 
 
@@ -42,6 +45,6 @@ event-log-reconstruction
 - ```pip install -r requirements.txt```
 
 2. ```cd data_preprocessing```
-3. For preprocessing: ```source data_preprocessing.sh```
+3. For preprocessing: ```source real_log_preprocessing.sh```
 4. For training and evaluating: Run ```AE.ipynb``` or ```VAE.ipynb```
 
