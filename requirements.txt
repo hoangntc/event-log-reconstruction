@@ -1,5 +1,6 @@
 pandas
 numpy
+jupyter notebook
 matplotlib
 seaborn
 scikit-learn
