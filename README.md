@@ -42,9 +42,17 @@ event-log-reconstruction
 1. Install requirement
 
 - Install pytorch: ```conda install pytorch torchvision -c soumith```
-- ```pip install -r requirements.txt```
+- Install requirements: ```pip install -r requirements.txt```
 
-2. ```cd data_preprocessing```
-3. For preprocessing: ```source real_log_preprocessing.sh```
-4. For training and evaluating: Run ```AE.ipynb``` or ```VAE.ipynb```
+2. For preprocessing: 
+- ```cd data_preprocessing```
+- ```source real_log_preprocessing.sh```
+
+3. For training and evaluating: 
+- ```cd experiment```
+- Run ```AE.ipynb``` or ```VAE.ipynb``` or ```LSTMAE```
+
+4. For baseline models:
+- ```cd base_model```
+- Run ```dummy_imputation.ipynb```
 
