@@ -8,9 +8,11 @@ event-log-reconstruction
 │   requirement.txt
 |
 |--- data: original dataset
-│   │   bpi_2012.csv
-|   |   bpi_2013.csv
-| 
+│   │   bpi_2013.csv
+|   |   bpi_2012.csv
+|   |   small_log.csv
+|   |   large_log.csv
+|
 |--- data_preprocessing
 |   |   induce_missing_data.py
 |   │   preprocess_variables.py
@@ -30,7 +32,6 @@ event-log-reconstruction
 |
 |-- base_model
 |   |   dummy_imputation.ipynb
-|   |   dummy_imputation_full.ipynb
 |   |   statistical_description.ipynb
 |
 
